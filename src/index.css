@@ -1,0 +1,190 @@
+@import "tailwindcss";
+@import "@fontsource-variable/plus-jakarta-sans";
+
+/*
+ * ───────────────────────────────────────────────
+ * Dark mode custom variant (Tailwind CSS v4)
+ * Permite alternar modo oscuro con la clase .dark
+ * en lugar de depender solo de prefers-color-scheme
+ * ───────────────────────────────────────────────
+ */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/*
+ * ───────────────────────────────────────────────
+ * Theme tokens  (Tailwind CSS v4 @theme block)
+ * ───────────────────────────────────────────────
+ * Paleta protagonista:
+ *   Lavender  #D2C3F6
+ *   Violet    #36255C
+ *
+ * Tonos derivados con contraste garantizado WCAG AA
+ */
+@theme {
+  /* ── Colores de marca ── */
+  --color-lavender-50: #fbf9fe;
+  --color-lavender-100: #f3ecfc;
+  --color-lavender-200: #e5d8f9;
+  --color-lavender-300: #D2C3F6;
+  --color-lavender-400: #b79ee8;
+  --color-lavender-500: #9774d6;
+
+  --color-violet-300: #7b6aa8;
+  --color-violet-400: #5a4585;
+  --color-violet-500: #46336e;
+  --color-violet-600: #36255C;
+  --color-violet-700: #291b48;
+  --color-violet-800: #1d1233;
+  --color-violet-900: #120a21;
+
+  /* ── Tipografía ── */
+  --font-sans: "Plus Jakarta Sans Variable", "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+}
+
+/*
+ * ───────────────────────────────────────────────
+ * Base / reset
+ * ───────────────────────────────────────────────
+ */
+html {
+  scroll-behavior: smooth;
+  /* Scrollbar fina estándar para Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(54, 37, 92, 0.25) transparent;
+  background-color: var(--color-lavender-100);
+  color: var(--color-violet-700);
+}
+
+html.dark {
+  scrollbar-color: rgba(210, 195, 246, 0.25) transparent;
+  background-color: var(--color-violet-800);
+  color: var(--color-lavender-200);
+}
+
+body {
+  @apply font-sans antialiased;
+  background-color: var(--color-lavender-100);
+  color: var(--color-violet-700);
+}
+
+/* ── Modo oscuro ── */
+.dark body,
+:root.dark body {
+  background-color: var(--color-violet-800);
+  color: var(--color-lavender-200);
+}
+
+/*
+ * ───────────────────────────────────────────────
+ * Transición unificada y sincronizada de cambio de tema
+ * body, header y footer cambian exactamente al mismo ritmo
+ * ───────────────────────────────────────────────
+ */
+body,
+header,
+footer {
+  transition: background-color 0.3s ease-in-out, border-color 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+/*
+ * ───────────────────────────────────────────────
+ * Scrollbar disimulada / sutil (WebKit / Chrome / Safari / Edge)
+ * Sin flechas en los extremos
+ * ───────────────────────────────────────────────
+ */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Ocultar flechas superior e inferior */
+::-webkit-scrollbar-button {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(54, 37, 92, 0.22);
+  border-radius: 9999px;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  transition: background-color 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(54, 37, 92, 0.45);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background-color: rgba(210, 195, 246, 0.25);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(210, 195, 246, 0.5);
+}
+
+/*
+ * ───────────────────────────────────────────────
+ * Focus visible — anillo accesible
+ * ───────────────────────────────────────────────
+ */
+:focus-visible {
+  outline: 2px solid var(--color-lavender-500);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+.dark :focus-visible {
+  outline-color: var(--color-lavender-300);
+}
+
+/*
+ * ───────────────────────────────────────────────
+ * Selección de texto
+ * ───────────────────────────────────────────────
+ */
+::selection {
+  background-color: var(--color-lavender-300);
+  color: var(--color-violet-700);
+}
+
+.dark ::selection {
+  background-color: var(--color-violet-500);
+  color: var(--color-lavender-100);
+}
+
+/*
+ * ───────────────────────────────────────────────
+ * Animaciones suaves de scroll reveal
+ * (Afectan únicamente a opacity y transform para no interferir con cambio de tema)
+ * ───────────────────────────────────────────────
+ */
+.reveal-hidden {
+  opacity: 0;
+  transform: translateY(22px);
+  transition-property: opacity, transform;
+  transition-duration: 0.5s;
+  transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-hidden {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
